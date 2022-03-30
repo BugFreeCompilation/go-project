@@ -66,7 +66,7 @@ func (*databaseStruct) Add(post *entity.Post) error {
 	// set id to current db id
 	// LastInsertId() will only work if the element is not there and gets added
 	// and won't work if it gets added a second time
-	// workaround by doing a SELECT statement
+	// workaround by doing a SELECT statement, adding error handling might be useful
 	// https://go.dev/doc/database/querying
 	sqliteDatabase.QueryRow(`SELECT id FROM posts WHERE title=(?)`,
 		post.TITLE).Scan(&post.ID)

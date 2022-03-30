@@ -53,7 +53,7 @@ func (*serviceStruct) Add(response http.ResponseWriter, request *http.Request) {
 	err_add := mydb.Add(&post)
 	if err_add != nil {
 		response.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(response).Encode(err.ServiceError{Message: "Failed to run Add: Adding entry failed."})
+		json.NewEncoder(response).Encode(err.ServiceError{Message: "Failed to run Add: Database failed to prepare."})
 		return
 	}
 
