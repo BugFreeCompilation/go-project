@@ -2,8 +2,8 @@ package database
 
 import (
 	"BugFreeCompilation/go-project/entity"
+	err "BugFreeCompilation/go-project/error"
 	"database/sql"
-	"errors"
 	"log"
 	"os"
 
@@ -65,7 +65,7 @@ func (*databaseStruct) Add(post *entity.Post) error {
 
 	statement, err_prepare := sqliteDatabase.Prepare(sqlStatement)
 	if err_prepare != nil {
-		return err_prepare
+		return err.ErrDatabasePrepare
 	}
 
 	statement.Exec(post.TITLE)
@@ -84,7 +84,7 @@ func (*databaseStruct) Add(post *entity.Post) error {
 func (*databaseStruct) Delete(post *entity.Post) error {
 	sqliteDatabase, err_open := sql.Open("sqlite3", "database.db")
 	if err_open != nil {
-		log.Fatal(err_open)
+		return err.ErrDatabaseOpen
 	}
 
 	defer sqliteDatabase.Close()
@@ -96,13 +96,13 @@ func (*databaseStruct) Delete(post *entity.Post) error {
 		post.TITLE).Scan(&post.ID)
 
 	if post.ID == 0 {
-		return errors.New("the entry you tried to delete does not exist")
+		return err.ErrDatabaseEntry
 	}
 
 	sqlStatement := `DELETE FROM posts WHERE title=(?)`
 	statement, err_prepare := sqliteDatabase.Prepare(sqlStatement)
 	if err_prepare != nil {
-		return err_prepare
+		return err.ErrDatabasePrepare
 	}
 	statement.Exec(post.TITLE)
 
@@ -112,7 +112,7 @@ func (*databaseStruct) Delete(post *entity.Post) error {
 func (*databaseStruct) GetAll() ([]entity.Post, error) {
 	sqliteDatabase, err_open := sql.Open("sqlite3", "database.db")
 	if err_open != nil {
-		log.Fatal(err_open)
+		return nil, err.ErrDatabaseOpen
 	}
 
 	defer sqliteDatabase.Close()
@@ -121,7 +121,7 @@ func (*databaseStruct) GetAll() ([]entity.Post, error) {
 
 	statement, err_query := sqliteDatabase.Query("SELECT * FROM posts")
 	if err_query != nil {
-		log.Fatal(err_query)
+		return nil, err.ErrDatabaseQuery
 	}
 	defer statement.Close()
 
