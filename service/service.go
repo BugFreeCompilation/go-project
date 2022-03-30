@@ -41,6 +41,7 @@ func (*serviceStruct) GetAll(response http.ResponseWriter, request *http.Request
 
 func (*serviceStruct) Add(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Content-Type", "application/json")
+
 	var post entity.Post
 	err_decode := json.NewDecoder(request.Body).Decode(&post)
 	if err_decode != nil {
@@ -62,6 +63,7 @@ func (*serviceStruct) Add(response http.ResponseWriter, request *http.Request) {
 
 func (*serviceStruct) Delete(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Content-Type", "application/json")
+
 	var post entity.Post
 	err_decode := json.NewDecoder(request.Body).Decode(&post)
 	if err_decode != nil {
@@ -71,7 +73,6 @@ func (*serviceStruct) Delete(response http.ResponseWriter, request *http.Request
 	}
 
 	err_delete := mydb.Delete(&post)
-
 	if err_delete != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		switch {

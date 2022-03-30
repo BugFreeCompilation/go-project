@@ -26,12 +26,9 @@ var (
 func TestAdd(t *testing.T) {
 	// https://stackoverflow.com/questions/24455147/how-do-i-send-a-json-string-in-a-post-request-in-go
 	var jsonStr = []byte(`{"TITLE": "Golang the Movie"}`)
-
 	// https://stackoverflow.com/questions/40680498/how-to-test-http-request-handlers
 	request, _ := http.NewRequest("POST", "/data", bytes.NewBuffer(jsonStr))
-
 	response := httptest.NewRecorder()
-
 	myservice.Add(response, request)
 
 	// the return should equal the input

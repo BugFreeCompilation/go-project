@@ -24,7 +24,6 @@ func InitSQLite3() Database {
 	if err_open != nil {
 		log.Fatal(err_open)
 	}
-
 	defer sqliteDatabase.Close()
 
 	// creating database that won't add the same entry twice and auto-increments id
@@ -33,7 +32,6 @@ func InitSQLite3() Database {
 	sqlStatement := `
 		CREATE TABLE posts (id INTEGER NOT NULL PRIMARY KEY UNIQUE, title TEXT UNIQUE);
 	`
-
 	_, err_exec := sqliteDatabase.Exec(sqlStatement)
 	if err_exec != nil {
 		log.Fatal(err_exec)
@@ -41,12 +39,10 @@ func InitSQLite3() Database {
 
 	// adding one entry as a test
 	sqlStatement = `INSERT INTO posts(title) VALUES (?)`
-
 	statement, err_addon := sqliteDatabase.Prepare(sqlStatement)
 	if err_addon != nil {
 		log.Fatal(err_addon)
 	}
-
 	var test_name string = "Titanic"
 	statement.Exec(test_name)
 
@@ -58,16 +54,13 @@ func (*databaseStruct) Add(post *entity.Post) error {
 	if err_open != nil {
 		log.Fatal(err_open)
 	}
-
 	defer sqliteDatabase.Close()
 
 	sqlStatement := `INSERT INTO posts(title) VALUES (?)`
-
 	statement, err_prepare := sqliteDatabase.Prepare(sqlStatement)
 	if err_prepare != nil {
 		return err.ErrDatabasePrepare
 	}
-
 	statement.Exec(post.TITLE)
 
 	// set id to current db id
@@ -86,7 +79,6 @@ func (*databaseStruct) Delete(post *entity.Post) error {
 	if err_open != nil {
 		return err.ErrDatabaseOpen
 	}
-
 	defer sqliteDatabase.Close()
 
 	// get id before deleting
@@ -114,11 +106,9 @@ func (*databaseStruct) GetAll() ([]entity.Post, error) {
 	if err_open != nil {
 		return nil, err.ErrDatabaseOpen
 	}
-
 	defer sqliteDatabase.Close()
 
 	var posts []entity.Post
-
 	statement, err_query := sqliteDatabase.Query("SELECT * FROM posts")
 	if err_query != nil {
 		return nil, err.ErrDatabaseQuery
