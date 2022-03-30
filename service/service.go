@@ -1,7 +1,7 @@
 package service
 
 import (
-	database "BugFreeCompilation/go-project/database"
+	"BugFreeCompilation/go-project/database"
 	"BugFreeCompilation/go-project/entity"
 	err "BugFreeCompilation/go-project/error"
 	"encoding/json"

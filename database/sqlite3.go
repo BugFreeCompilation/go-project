@@ -52,7 +52,7 @@ func InitSQLite3() Database {
 func (*databaseStruct) Add(post *entity.Post) error {
 	sqliteDatabase, err_open := sql.Open("sqlite3", "database.db")
 	if err_open != nil {
-		log.Fatal(err_open)
+		return err.ErrDatabaseOpen
 	}
 	defer sqliteDatabase.Close()
 
